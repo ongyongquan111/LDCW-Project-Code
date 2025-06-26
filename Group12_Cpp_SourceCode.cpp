@@ -12,11 +12,15 @@ Group Members: Joel Prakash Noel Francisco 242UT2443B
 #include <limits>
 #include <cctype>
 #include <windows.h>
+#include <cmath>
 using namespace std;
 
-const int GREEN = 10;
-const int YELLOW = 14;
-const int RED = 12;
+const int DARK_GREEN = 2;
+const int BRIGHT_GREEN = 10;
+const int SKY_BLUE = 11;
+const int SUN_YELLOW = 14;
+const int LEAF_GREEN = 10;
+const int ERROR_RED = 12;
 const int RESET = 7;
 
 void setColor(int color) {
@@ -24,23 +28,27 @@ void setColor(int color) {
 }
 
 void showWelcome() {
-    setColor(GREEN);
-    cout << "================================\n";
-    cout << "   CARBON FOOTPRINT CALCULATOR\n";
-    cout << "================================\n\n";
+    setColor(DARK_GREEN);
+    cout << "========================================\n";
+    setColor(BRIGHT_GREEN);
+    cout << "   GREEN CITY - CARBON CALCULATOR\n";
+    setColor(DARK_GREEN);
+    cout << "========================================\n\n";
+    setColor(SKY_BLUE);
+    cout << "Calculate your environmental impact\n\n";
     setColor(RESET);
 }
 
 float getValidNumber(string prompt, float min, float max) {
     float value;
     while (true) {
-        setColor(GREEN);
+        setColor(BRIGHT_GREEN);
         cout << prompt;
-        setColor(YELLOW);
+        setColor(SUN_YELLOW);
         cin >> value;
         
         if (cin.fail() || value < min || value > max) {
-            setColor(RED);
+            setColor(ERROR_RED);
             cout << "Invalid input! Please enter between " << min << " and " << max << ".\n";
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -78,6 +86,29 @@ string getValidTransport() {
     }
 }
 
+void showSustainabilityTips(float total) {
+    cout << "\n=== SUSTAINABILITY TIPS ===" << endl;
+    
+    if (total < 5) {
+        setColor(LEAF_GREEN);
+        cout << "Great job! You're eco-friendly!\n";
+    }
+    else if (total < 10) {
+        setColor(SUN_YELLOW);
+        cout << "Good effort - can improve further!\n";
+        setColor(BRIGHT_GREEN);
+        cout << "- Try public transport 2 days/week\n";
+        cout << "- Switch to LED bulbs\n";
+    }
+    else {
+        setColor(ERROR_RED);
+        cout << "High impact - action needed!\n";
+        setColor(BRIGHT_GREEN);
+        cout << "- Audit home energy usage\n";
+        cout << "- Consider solar options\n";
+    }
+}
+
 int main() {
     showWelcome();
     
@@ -99,14 +130,18 @@ int main() {
     float total = transportEmission + electricityEmission;
 
     // Results
-    setColor(GREEN);
+    setColor(SKY_BLUE);
     cout << fixed << setprecision(2);
-    cout << "\n=== SUMMARY ===" << endl;
-    setColor(YELLOW);
+    cout << "\n=== CARBON FOOTPRINT ===" << endl;
+    setColor(BRIGHT_GREEN);
     cout << "Transportation: " << transportEmission << " kg CO2" << endl;
     cout << "Electricity:    " << electricityEmission << " kg CO2" << endl;
-    setColor(GREEN);
+    setColor(SUN_YELLOW);
     cout << "TOTAL DAILY:    " << total << " kg CO2" << endl;
+    showSustainabilityTips(total);
+    
+    setColor(LEAF_GREEN);
+    cout << "\nLearn more: https://ecosmartcity.shorthandstories.com/\n";
     
     setColor(RESET);
     return 0;
