@@ -11,17 +11,39 @@ Group Members: Joel Prakash Noel Francisco 242UT2443B
 #include <iomanip>
 #include <limits>
 #include <cctype>
+#include <windows.h>
 using namespace std;
+
+const int GREEN = 10;
+const int YELLOW = 14;
+const int RED = 12;
+const int RESET = 7;
+
+void setColor(int color) {
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+}
+
+void showWelcome() {
+    setColor(GREEN);
+    cout << "================================\n";
+    cout << "   CARBON FOOTPRINT CALCULATOR\n";
+    cout << "================================\n\n";
+    setColor(RESET);
+}
 
 float getValidNumber(string prompt, float min, float max) {
     float value;
     while (true) {
+        setColor(GREEN);
         cout << prompt;
+        setColor(YELLOW);
         cin >> value;
+        
         if (cin.fail() || value < min || value > max) {
+            setColor(RED);
+            cout << "Invalid input! Please enter between " << min << " and " << max << ".\n";
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
-            cout << "Invalid input! Please enter between " << min << " and " << max << ".\n";
         } else {
             cin.ignore();
             return value;
@@ -57,9 +79,11 @@ string getValidTransport() {
 }
 
 int main() {
+    showWelcome();
+    
     // Transportation
     string transport = getValidTransport();
-    float distance = getValidNumber("Distance (km): ", 0, 1000);
+    float distance = getValidNumber("Daily distance (km): ", 0, 1000);
     
     float transportEmission = 0;
     if (transport == "car") transportEmission = distance * 0.271;
@@ -68,18 +92,22 @@ int main() {
     else if (transport == "ev") transportEmission = distance * 0.05;
 
     // Electricity
-    float electricity = getValidNumber("Electricity (kWh): ", 0, 200);
-    float renewable = getValidNumber("% Renewable: ", 0, 100);
+    float electricity = getValidNumber("Daily electricity (kWh): ", 0, 200);
+    float renewable = getValidNumber("% from renewable sources: ", 0, 100);
     
     float electricityEmission = electricity * 0.475 * (1 - renewable/100.0);
     float total = transportEmission + electricityEmission;
 
     // Results
+    setColor(GREEN);
     cout << fixed << setprecision(2);
-    cout << "\n=== CARBON FOOTPRINT ===" << endl;
-    cout << "Transport: " << transportEmission << " kg CO2" << endl;
-    cout << "Electricity: " << electricityEmission << " kg CO2" << endl;
-    cout << "TOTAL DAILY: " << total << " kg CO2" << endl;
+    cout << "\n=== SUMMARY ===" << endl;
+    setColor(YELLOW);
+    cout << "Transportation: " << transportEmission << " kg CO2" << endl;
+    cout << "Electricity:    " << electricityEmission << " kg CO2" << endl;
+    setColor(GREEN);
+    cout << "TOTAL DAILY:    " << total << " kg CO2" << endl;
     
+    setColor(RESET);
     return 0;
 }
