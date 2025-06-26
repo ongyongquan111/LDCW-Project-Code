@@ -1,4 +1,4 @@
-/*Compilar used: Dev-C++ 5.11  |  TDM-GCC 4.9.2 64-bit release
+/*Compiler used: Dev-C++ 5.11  |  TDM-GCC 4.9.2 64-bit release
 Group 12
 Group Leader: Ho Yen Hong 242UT 241BT
 Group Members: Joel Prakash Noel Francisco 242UT2443B
@@ -46,7 +46,7 @@ int main() {
     printBanner();
     showWelcome();
     
-    //Get user inputs with validation
+    // Get user inputs with validation
     float transportEmission = calculateTransportEmission();
     float electricityEmission = calculateElectricityEmission();
     float totalEmission = transportEmission + electricityEmission;
@@ -62,7 +62,7 @@ int main() {
     cout << "TOTAL DAILY:    " << totalEmission << " kg CO2" << endl;
     cout << "ANNUAL IMPACT:  " << totalEmission * 365 << " kg CO2" << endl;
     
-    // Show feedback
+    // Show personalized feedback
     showSustainabilityTips(totalEmission);
     displayCarbonComparison(totalEmission);
     
@@ -134,7 +134,7 @@ float getValidNumber(const string& prompt, float min, float max) {
     }
 }
 
-// Validato Transport mode
+//Transport mode validator
 string getValidTransport() {
     string transport;
     string validOptions[] = {"car", "bus", "train", "bicycle", "ev", "walk"};
@@ -188,7 +188,7 @@ float calculateElectricityEmission() {
     float electricity = getValidNumber("Daily electricity (0-200kWh): ", 0, 200);
     float renewable = getValidNumber("% from renewable sources (0-100): ", 0, 100);
     
-    //Based on renewable percentage then adjust emission
+    // Adjust emission based on renewable percentage
     float emissionFactor = 0.475 * (1 - renewable/100.0);
     return electricity * emissionFactor;
 }
